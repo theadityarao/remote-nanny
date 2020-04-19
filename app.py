@@ -25,24 +25,20 @@ class Kid(db.Model):
     name = db.Column(db.String(200), unique=True)
     age = db.Column(db.Integer)
 
-    def __init__(self, name, age, comments):
+    def __init__(self, name, age):
         self.name = name
         self.age = age
-        self.comments = comments
 
 
 class Nanny(db.Model):
     __tablename__ = "nanny"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), unique=True)
-    age = db.Column(db.Integer)
+    name = db.Column(db.String(200))
     available = db.Column(db.Boolean)
 
-    def __init__(self, customer, dealer, rating, comments):
-        self.customer = customer
-        self.dealer = dealer
-        self.rating = rating
-        self.comments = comments
+    def __init__(self, name, available):
+        self.name = name
+        self.available = available
 
 
 class Zoom(db.Model):
@@ -66,9 +62,9 @@ class Preference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     kid_id = db.Column(db.Integer, db.ForeignKey("kid.id"))
     nanny_id = db.Column(db.Integer, db.ForeignKey("nanny.id"))
-    score = db.Column(db.Integer)
+    score = db.Column(db.Float)
 
-    def __init__(self, kid_id, nanny_id):
+    def __init__(self, kid_id, nanny_id, score):
         self.kid_id = kid_id
         self.nanny_id = nanny_id
         self.score = score
@@ -80,7 +76,22 @@ def index():
 
 
 # @app.route('someroute', methods=['POST/GET/DELETE'])
-# def somefunction
+def neednanny():
+    # first available nanny in case no preference
+    try:
+        best_nanny = Nanny.query.filter_by(available=True).first()
+    except:
+        return "Oops! Something went wrong", 400
+
+    # get highest rated nanny
+    try:
+        for pref_nanny in Preference.query.order_by(Nanny.score.desc()).all():
+            if pref_nanny.available:
+                best_nanny = pref_nanny
+                break
+    except:
+        return "Oops! Something went wrong", 400
+    return best_nanny.id
 
 
 if __name__ == "__main__":
