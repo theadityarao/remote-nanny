@@ -48,8 +48,8 @@ class Nanny(db.Model):
 class Zoom(db.Model):
     __tablename__ = "zoom"
     id = db.Column(db.Integer, primary_key=True)
-    kid_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    nanny_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    kid_id = db.Column(db.Integer, db.ForeignKey("kid.id"))
+    nanny_id = db.Column(db.Integer, db.ForeignKey("nanny.id"))
     start_time = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
 
@@ -64,8 +64,8 @@ class Zoom(db.Model):
 class Preference(db.Model):
     __tablename__ = "preference"
     id = db.Column(db.Integer, primary_key=True)
-    kid_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    nanny_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    kid_id = db.Column(db.Integer, db.ForeignKey("kid.id"))
+    nanny_id = db.Column(db.Integer, db.ForeignKey("nanny.id"))
     score = db.Column(db.Integer)
 
     def __init__(self, kid_id, nanny_id):
