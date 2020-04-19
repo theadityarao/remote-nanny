@@ -83,7 +83,7 @@ def neednanny():
     except:
         return "Oops! Something went wrong", 400
 
-    # get highest rated nanny
+    # get the highest rated nanny
     try:
         for pref_nanny in Preference.query.order_by(Nanny.score.desc()).all():
             if pref_nanny.available:
